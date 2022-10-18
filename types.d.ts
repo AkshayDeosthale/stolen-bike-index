@@ -1,3 +1,3 @@
 declare namespace ApiTypes {
-  export type ApiResponseType = {};
+  export type ApiResponseType = { data: any };
 }
