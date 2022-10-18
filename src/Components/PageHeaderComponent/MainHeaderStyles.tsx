@@ -37,5 +37,10 @@ export const MainHeaderDescriptionTextContainer = styled(Box)<BoxProps>(
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      height: "100%",
+      alignItems: "flex-end",
+    },
   })
 );
