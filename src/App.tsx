@@ -1,12 +1,41 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Box, BoxProps } from "@mui/material";
+import { styled, Theme } from "@mui/system";
 import "./App.css";
+import MainHeader from "./Components/PageHeaderComponent";
+import HeaderDescription from "./Components/PageHeaderComponent/HeaderDescription";
+
+const HeaderContainer = styled(Box)<BoxProps>(
+  ({ theme }: { theme: Theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    padding: "10px 30px 10px 30px",
+    height: "97vh",
+    backgroundImage: "url(/resources/illustration.png)",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  })
+);
+
+const ContentContainer = styled(Box)<BoxProps>(
+  ({ theme }: { theme: Theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    padding: "10px 30px 10px 30px",
+    height: "97vh",
+  })
+);
 
 function App() {
-  const queryClient = new QueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>Main page</QueryClientProvider>
+    <Box>
+      <HeaderContainer>
+        <MainHeader />
+        <HeaderDescription />
+      </HeaderContainer>
+      <ContentContainer>below content</ContentContainer>
+    </Box>
   );
 }
 
