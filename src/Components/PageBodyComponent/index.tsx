@@ -18,8 +18,10 @@ import { getStolenBikeDetails } from "../../Utility/FetchData";
 import { useQuery } from "@tanstack/react-query";
 
 import { ApiTypes } from "../../../types";
+import { CircularProgress } from "@mui/material";
+import FilterPopper from "./FilterPopper";
 
-interface Data {
+export interface Data {
   name: string;
   id: string;
   detail: any;
@@ -70,8 +72,16 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     </TableHead>
   );
 }
-
-function EnhancedTableToolbar() {
+interface EnhancedTableToolbar {
+  data: any;
+  setData: React.Dispatch<React.SetStateAction<Data[]>>;
+  originaldata: any;
+}
+function EnhancedTableToolbar({
+  data,
+  setData,
+  originaldata,
+}: EnhancedTableToolbar) {
   return (
     <Toolbar
       sx={{
@@ -83,9 +93,11 @@ function EnhancedTableToolbar() {
         Cases
       </Typography>
       <Tooltip title="Filter list">
-        <IconButton>
-          <RiFilter2Fill color={"azure"} />
-        </IconButton>
+        <FilterPopper
+          data={data}
+          setData={setData}
+          originaldata={originaldata}
+        />
       </Tooltip>
     </Toolbar>
   );
@@ -115,6 +127,7 @@ export default function PageBodyComponent() {
   const { isLoading, isError, data, error } = useQuery(["page", page], () =>
     getStolenBikeDetails()
   );
+
   const [len, setSen] = React.useState();
   React.useEffect(() => {
     if (data) {
@@ -133,68 +146,80 @@ export default function PageBodyComponent() {
   }, [isLoading, data]);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper
-        sx={{
-          width: "100%",
-          backgroundColor: "transparent",
-          color: "azure",
-          border: "none",
-        }}
-        elevation={0}
-      >
-        <EnhancedTableToolbar />
-        <TableContainer>
-          <Table aria-labelledby="tableTitle">
-            <EnhancedTableHead rowCount={tempRows.length} />
-            <TableBody>
-              {tempRows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <>
+      {isLoading ? (
+        <Box>
+          <CircularProgress color="secondary" size="10rem" />
+        </Box>
+      ) : (
+        <Box sx={{ width: "100%" }}>
+          <Paper
+            sx={{
+              width: "100%",
+              backgroundColor: "transparent",
+              color: "azure",
+              border: "none",
+            }}
+            elevation={0}
+          >
+            <EnhancedTableToolbar
+              data={tempRows}
+              setData={setTempRows}
+              originaldata={data?.data.bikes}
+            />
+            <TableContainer>
+              <Table aria-labelledby="tableTitle">
+                <EnhancedTableHead rowCount={tempRows.length} />
+                <TableBody>
+                  {tempRows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.name}
-                    >
-                      <TableCell
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        sx={{ color: "azure" }}
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right" sx={{ color: "azure" }}>
-                        <Tooltip title="Click for details">
-                          <DetailDialogs detail={row.detail} />
-                        </Tooltip>
-                      </TableCell>
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.name}
+                        >
+                          <TableCell
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                            sx={{ color: "azure" }}
+                          >
+                            {row.name}
+                          </TableCell>
+                          <TableCell align="right" sx={{ color: "azure" }}>
+                            <Tooltip title="Click for details">
+                              <DetailDialogs detail={row.detail} />
+                            </Tooltip>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10]}
-          component="div"
-          count={Number(len)}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{ color: "azure" }}
-        />
-      </Paper>
-    </Box>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10]}
+              component="div"
+              count={Number(len)}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              sx={{ color: "azure" }}
+            />
+          </Paper>
+        </Box>
+      )}
+    </>
   );
 }

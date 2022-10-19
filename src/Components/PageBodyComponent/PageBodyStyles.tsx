@@ -7,3 +7,11 @@ export const DialogDetailTitle = styled(Typography)<TypographyProps>(
     fontSize: theme.spacing(2),
   })
 );
+
+export const FilterOptionContainer = styled(Box)<BoxProps>(
+  ({ theme }: { theme: Theme }) => ({
+    width: "250px",
+    padding: theme.spacing(2),
+    cursor: "pointer",
+  })
+);

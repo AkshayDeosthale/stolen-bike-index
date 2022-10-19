@@ -10,6 +10,7 @@ import { RiCloseLine, RiMenuFill } from "react-icons/ri";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { DialogDetailTitle } from "./PageBodyStyles";
+import dayjs from "dayjs";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -61,7 +62,8 @@ export default function DetailDialogs({ detail }: DetailDialogsProps) {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log({ detail });
+
+  const date = new Date(detail.date_stolen);
 
   return (
     <div>
@@ -102,7 +104,7 @@ export default function DetailDialogs({ detail }: DetailDialogsProps) {
             <DialogDetailTitle>Case description</DialogDetailTitle>
             <p>{detail?.description} </p>
             <DialogDetailTitle>Case Date</DialogDetailTitle>
-            {/* <p>{Date(detail.date_stolen)}</p> */}
+            <p>{`${dayjs(detail.date_stolen)}`}</p>
             <DialogDetailTitle>Case Location</DialogDetailTitle>
             <p>{detail.stolen_location}</p>
           </Box>
