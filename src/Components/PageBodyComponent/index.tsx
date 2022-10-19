@@ -14,6 +14,10 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { RiFilter2Fill, RiMenuFill } from "react-icons/ri";
 import DetailDialogs from "./DetailDialog";
+import { getStolenBikeDetails } from "../../Utility/FetchData";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { ApiTypes } from "../../../types";
 
 interface Data {
   name: string;
@@ -126,6 +130,12 @@ export default function PageBodyComponent() {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  //data fetching
+
+  const { isLoading, isError, data, error } = useQuery(["page", page], () =>
+    getStolenBikeDetails(page.toString(), "10")
+  );
+  React.useEffect(() => {}, []);
 
   return (
     <Box sx={{ width: "100%" }}>

@@ -35,10 +35,6 @@ const ContentContainer = styled(Box)<BoxProps>(
 );
 
 function App() {
-  React.useEffect(() => {
-    getStolenBikeDetails("1", "10");
-  }, []);
-
   return (
     <Box>
       <HeaderContainer>
