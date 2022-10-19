@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { RiFilter2Fill, RiMenuFill } from "react-icons/ri";
+import DetailDialogs from "./DetailDialog";
 
 interface Data {
   name: string;
@@ -69,8 +70,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox" />
-
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -92,16 +91,11 @@ function EnhancedTableToolbar() {
   return (
     <Toolbar
       sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
+        pl: { xs: 0, sm: 0 },
+        pr: { xs: 0, sm: 0 },
       }}
     >
-      <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
+      <Typography sx={{ flex: "1 1 100%" }} id="tableTitle" component="div">
         Cases
       </Typography>
       <Tooltip title="Filter list">
@@ -161,8 +155,6 @@ export default function PageBodyComponent() {
                       tabIndex={-1}
                       key={row.name}
                     >
-                      <TableCell padding="checkbox" />
-
                       <TableCell
                         id={labelId}
                         scope="row"
@@ -173,14 +165,7 @@ export default function PageBodyComponent() {
                       </TableCell>
                       <TableCell align="right" sx={{ color: "azure" }}>
                         <Tooltip title="Click for details">
-                          <IconButton
-                            sx={{
-                              padding: 0,
-                              color: "azure",
-                            }}
-                          >
-                            <RiMenuFill />
-                          </IconButton>
+                          <DetailDialogs />
                         </Tooltip>
                       </TableCell>
                     </TableRow>

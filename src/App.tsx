@@ -27,7 +27,9 @@ const ContentContainer = styled(Box)<BoxProps>(
     height: "97vh",
     justifyContent: "center",
     alignItems: "center",
-    [theme.breakpoints.down("md")]: {},
+    [theme.breakpoints.down("md")]: {
+      marginTop: theme.spacing(5),
+    },
   })
 );
 
