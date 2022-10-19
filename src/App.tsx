@@ -4,6 +4,7 @@ import { styled, Theme } from "@mui/system";
 import "./App.css";
 import MainHeader from "./Components/PageHeaderComponent";
 import HeaderDescription from "./Components/PageHeaderComponent/HeaderDescription";
+import PageBodyComponent from "./Components/PageBodyComponent";
 
 const HeaderContainer = styled(Box)<BoxProps>(
   ({ theme }: { theme: Theme }) => ({
@@ -24,6 +25,9 @@ const ContentContainer = styled(Box)<BoxProps>(
     flexDirection: "column",
     padding: "10px 30px 10px 30px",
     height: "97vh",
+    justifyContent: "center",
+    alignItems: "center",
+    [theme.breakpoints.down("md")]: {},
   })
 );
 
@@ -34,7 +38,9 @@ function App() {
         <MainHeader />
         <HeaderDescription />
       </HeaderContainer>
-      <ContentContainer>below content</ContentContainer>
+      <ContentContainer>
+        <PageBodyComponent />
+      </ContentContainer>
     </Box>
   );
 }
