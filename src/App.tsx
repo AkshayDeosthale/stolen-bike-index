@@ -5,7 +5,6 @@ import "./App.css";
 import MainHeader from "./Components/PageHeaderComponent";
 import HeaderDescription from "./Components/PageHeaderComponent/HeaderDescription";
 import PageBodyComponent from "./Components/PageBodyComponent";
-import { getStolenBikeDetails } from "./Utility/FetchData";
 
 const HeaderContainer = styled(Box)<BoxProps>(
   ({ theme }: { theme: Theme }) => ({

@@ -29,8 +29,6 @@ function createData(name: string): Data {
   };
 }
 
-let rows: Data[] = [];
-
 interface HeadCell {
   numeric: boolean;
   id: keyof Data;
@@ -99,7 +97,7 @@ function EnhancedTableToolbar() {
 
 export default function PageBodyComponent() {
   const [page, setPage] = React.useState(0);
-
+  const [tempRows, setTempRows] = React.useState<Data[]>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -115,23 +113,25 @@ export default function PageBodyComponent() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tempRows.length) : 0;
   //data fetching
 
   const { isLoading, isError, data, error } = useQuery(["page", page], () =>
-    getStolenBikeDetails(page.toString(), "10")
+    getStolenBikeDetails()
   );
+  const [len, setSen] = React.useState();
   React.useEffect(() => {
     if (data) {
       const {
         data: { bikes },
       } = data;
+      setSen(bikes.length);
 
-      const newArr: Data[] = [];
-      bikes.map((bike: any) => newArr.push(createData(bike.title)));
-      rows = newArr;
+      bikes.map((bike: any) =>
+        setTempRows((tempRows) => [...tempRows, { name: bike.title }])
+      );
     }
-  }, [data, page]);
+  }, [isLoading, data]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -147,9 +147,9 @@ export default function PageBodyComponent() {
         <EnhancedTableToolbar />
         <TableContainer>
           <Table aria-labelledby="tableTitle">
-            <EnhancedTableHead rowCount={rows.length} />
+            <EnhancedTableHead rowCount={tempRows.length} />
             <TableBody>
-              {rows
+              {tempRows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -188,7 +188,7 @@ export default function PageBodyComponent() {
         <TablePagination
           rowsPerPageOptions={[10]}
           component="div"
-          count={rows.length}
+          count={Number(len)}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
