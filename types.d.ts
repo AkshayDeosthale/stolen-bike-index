@@ -1,7 +1,7 @@
 export declare namespace ApiTypes {
   interface ApiResponseType {
     data: {
-      bikes: BikesInterface;
+      bikes: BikesInterface[];
     };
   }
   interface BikesInterface {

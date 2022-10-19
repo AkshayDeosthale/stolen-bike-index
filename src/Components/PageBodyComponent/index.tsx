@@ -12,10 +12,10 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { RiFilter2Fill, RiMenuFill } from "react-icons/ri";
+import { RiFilter2Fill } from "react-icons/ri";
 import DetailDialogs from "./DetailDialog";
 import { getStolenBikeDetails } from "../../Utility/FetchData";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { ApiTypes } from "../../../types";
 
@@ -29,21 +29,7 @@ function createData(name: string): Data {
   };
 }
 
-const rows = [
-  createData("Cupcake"),
-  createData("Donut"),
-  createData("Eclair"),
-  createData("Frozen yoghurt"),
-  createData("Gingerbread"),
-  createData("Honeycomb"),
-  createData("Ice cream sandwich"),
-  createData("Jelly Bean"),
-  createData("KitKat"),
-  createData("Lollipop"),
-  createData("Marshmallow"),
-  createData("Nougat"),
-  createData("Oreo"),
-];
+let rows: Data[] = [];
 
 interface HeadCell {
   numeric: boolean;
@@ -114,7 +100,7 @@ function EnhancedTableToolbar() {
 export default function PageBodyComponent() {
   const [page, setPage] = React.useState(0);
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -135,7 +121,17 @@ export default function PageBodyComponent() {
   const { isLoading, isError, data, error } = useQuery(["page", page], () =>
     getStolenBikeDetails(page.toString(), "10")
   );
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    if (data) {
+      const {
+        data: { bikes },
+      } = data;
+
+      const newArr: Data[] = [];
+      bikes.map((bike: any) => newArr.push(createData(bike.title)));
+      rows = newArr;
+    }
+  }, [data, page]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -190,7 +186,7 @@ export default function PageBodyComponent() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
