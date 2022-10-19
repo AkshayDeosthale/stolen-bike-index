@@ -49,8 +49,10 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
     </DialogTitle>
   );
 }
-
-export default function DetailDialogs() {
+type DetailDialogsProps = {
+  detail: any;
+};
+export default function DetailDialogs({ detail }: DetailDialogsProps) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -59,6 +61,7 @@ export default function DetailDialogs() {
   const handleClose = () => {
     setOpen(false);
   };
+  console.log({ detail });
 
   return (
     <div>
@@ -91,18 +94,22 @@ export default function DetailDialogs() {
           }}
         >
           <Box sx={{ width: { xs: "100%", md: "40%" } }}>
-            <Typography>Picture</Typography>
+            <img src={detail.large_img} height="100px" width="130px" />
           </Box>
           <Box sx={{ width: { xs: "100%", md: "60%" } }}>
-            <DialogDetailTitle>Case Title</DialogDetailTitle>
+            <DialogDetailTitle>Case Title : </DialogDetailTitle>
+            <p>{detail.title}</p>
             <DialogDetailTitle>Case description</DialogDetailTitle>
+            <p>{detail?.description} </p>
             <DialogDetailTitle>Case Date</DialogDetailTitle>
+            {/* <p>{Date(detail.date_stolen)}</p> */}
             <DialogDetailTitle>Case Location</DialogDetailTitle>
+            <p>{detail.stolen_location}</p>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Save changes
+            Close
           </Button>
         </DialogActions>
       </BootstrapDialog>

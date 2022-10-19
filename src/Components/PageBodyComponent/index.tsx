@@ -21,12 +21,8 @@ import { ApiTypes } from "../../../types";
 
 interface Data {
   name: string;
-}
-
-function createData(name: string): Data {
-  return {
-    name,
-  };
+  id: string;
+  detail: any;
 }
 
 interface HeadCell {
@@ -128,7 +124,10 @@ export default function PageBodyComponent() {
       setSen(bikes.length);
 
       bikes.map((bike: any) =>
-        setTempRows((tempRows) => [...tempRows, { name: bike.title }])
+        setTempRows((tempRows) => [
+          ...tempRows,
+          { name: bike.title, id: bike.id, detail: bike },
+        ])
       );
     }
   }, [isLoading, data]);
@@ -171,7 +170,7 @@ export default function PageBodyComponent() {
                       </TableCell>
                       <TableCell align="right" sx={{ color: "azure" }}>
                         <Tooltip title="Click for details">
-                          <DetailDialogs />
+                          <DetailDialogs detail={row.detail} />
                         </Tooltip>
                       </TableCell>
                     </TableRow>
