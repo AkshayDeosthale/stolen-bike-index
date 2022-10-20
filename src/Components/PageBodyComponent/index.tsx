@@ -10,16 +10,15 @@ import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { RiFilter2Fill } from "react-icons/ri";
 import DetailDialogs from "./DetailDialog";
 import { getStolenBikeDetails } from "../../Utility/FetchData";
 import { useQuery } from "@tanstack/react-query";
-
+import { ImFileEmpty } from "react-icons/im";
 import { ApiTypes } from "../../../types";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import FilterPopper from "./FilterPopper";
+import { MdOutlineError } from "react-icons/md";
 
 export interface Data {
   name: string;
@@ -144,81 +143,110 @@ export default function PageBodyComponent() {
       );
     }
   }, [isLoading, data]);
+  console.log({ isError });
 
   return (
     <>
-      {isLoading ? (
+      {isError ? (
         <Box>
-          <CircularProgress color="secondary" size="10rem" />
+          <MdOutlineError fontSize="30px" />
+          <Typography component="h2"> Oops we ran into an error!</Typography>
         </Box>
       ) : (
-        <Box sx={{ width: "100%" }}>
-          <Paper
-            sx={{
-              width: "100%",
-              backgroundColor: "transparent",
-              color: "azure",
-              border: "none",
-            }}
-            elevation={0}
-          >
-            <EnhancedTableToolbar
-              data={tempRows}
-              setData={setTempRows}
-              originaldata={data?.data.bikes}
-            />
-            <TableContainer>
-              <Table aria-labelledby="tableTitle">
-                <EnhancedTableHead rowCount={tempRows.length} />
-                <TableBody>
-                  {tempRows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
+        <>
+          {isLoading ? (
+            <Box>
+              <CircularProgress color="secondary" size="10rem" />
+            </Box>
+          ) : tempRows.length ? (
+            <Box sx={{ width: "100%" }}>
+              <Paper
+                sx={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  color: "azure",
+                  border: "none",
+                }}
+                elevation={0}
+              >
+                <EnhancedTableToolbar
+                  data={tempRows}
+                  setData={setTempRows}
+                  originaldata={data?.data.bikes}
+                />
+                <TableContainer>
+                  <Table aria-labelledby="tableTitle">
+                    <EnhancedTableHead rowCount={tempRows.length} />
+                    <TableBody>
+                      {tempRows
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((row, index) => {
+                          const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.name}
-                        >
-                          <TableCell
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            sx={{ color: "azure" }}
-                          >
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="right" sx={{ color: "azure" }}>
-                            <Tooltip title="Click for details">
-                              <DetailDialogs detail={row.detail} />
-                            </Tooltip>
-                          </TableCell>
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={row.name}
+                            >
+                              <TableCell
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                                sx={{ color: "azure" }}
+                              >
+                                {row.name}
+                              </TableCell>
+                              <TableCell align="right" sx={{ color: "azure" }}>
+                                <Tooltip title="Click for details">
+                                  <DetailDialogs detail={row.detail} />
+                                </Tooltip>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      {emptyRows > 0 && (
+                        <TableRow>
+                          <TableCell colSpan={6} />
                         </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[10]}
-              component="div"
-              count={Number(len)}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              sx={{ color: "azure" }}
-            />
-          </Paper>
-        </Box>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[10]}
+                  component="div"
+                  count={Number(len)}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  sx={{ color: "azure" }}
+                />
+              </Paper>
+            </Box>
+          ) : (
+            <Box>
+              <IconButton
+                onClick={() => {
+                  location.reload();
+                }}
+                sx={{
+                  marginBottom: 6,
+                }}
+              >
+                <ImFileEmpty fontSize="30px" color="azure" />
+              </IconButton>
+              <Typography component="h2">
+                No results found click above icon to refresh the search
+              </Typography>
+            </Box>
+          )}
+        </>
       )}
     </>
   );
