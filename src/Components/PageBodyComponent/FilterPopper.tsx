@@ -73,7 +73,6 @@ export default function FilterPopper({
     temp = temp.filter(
       (t: any) => t.detail.date_stolen === dateInNumber.getTime()
     );
-    console.log({ temp });
 
     setData(temp);
   };

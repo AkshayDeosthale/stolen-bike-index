@@ -143,7 +143,6 @@ export default function PageBodyComponent() {
       );
     }
   }, [isLoading, data]);
-  console.log({ isError });
 
   return (
     <>
