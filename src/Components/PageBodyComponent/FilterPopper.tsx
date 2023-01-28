@@ -1,23 +1,14 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Popper, { PopperPlacementType } from "@mui/material/Popper";
+import { ClickAwayListener, IconButton, Paper, TextField } from "@mui/material";
 import Fade from "@mui/material/Fade";
-import {
-  ClickAwayListener,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { RiFilter2Fill } from "react-icons/ri";
-import { FilterOptionContainer } from "./PageBodyStyles";
+import Popper, { PopperPlacementType } from "@mui/material/Popper";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import * as React from "react";
+import { RiFilter2Fill } from "react-icons/ri";
 import { Data } from ".";
-import { getStolenBikeDetails } from "../../Utility/FetchData";
-import { useQuery } from "@tanstack/react-query";
+import { FilterOptionContainer } from "./PageBodyStyles";
 
 interface EnhancedTableToolbar {
   data: any;
